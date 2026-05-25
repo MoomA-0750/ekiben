@@ -105,7 +105,40 @@ Any block (except `spacer`) accepts an optional `color` field to override the ca
 
 ## Deploy to GitHub Pages
 
-### Step 1 — Create your site repository
+The easiest way is to use **[ekiben-template](https://github.com/MoomA-0750/ekiben-template)** — a ready-made repository template that handles the GitHub Actions workflow for you. No local ekiben installation needed.
+
+### Using ekiben-template (recommended)
+
+**One-time setup:**
+
+1. Open [ekiben-template](https://github.com/MoomA-0750/ekiben-template) and click **"Use this template" → "Create a new repository"**
+2. Clone your new repository:
+   ```bash
+   git clone git@github.com:<your-username>/<your-repo>.git
+   cd <your-repo>
+   ```
+3. Enable GitHub Pages: **Settings → Pages → Source → GitHub Actions**
+4. *(X blocks only)* Add `TWITTER_BEARER_TOKEN` to **Settings → Secrets and variables → Actions**
+
+**Everyday workflow:**
+
+```bash
+# Edit site.yaml or add images to assets/
+git add .
+git commit -m "Update profile"
+git push
+# GitHub Actions rebuilds and redeploys automatically
+```
+
+Your site is live at `https://<your-username>.github.io/<your-repo>/`.
+
+---
+
+### Manual setup (without the template)
+
+If you prefer to set things up from scratch:
+
+**Step 1 — Create your site repository**
 
 Create a new repository on GitHub (e.g. `my-profile`), then:
 
@@ -120,39 +153,17 @@ git remote add origin git@github.com:<your-username>/my-profile.git
 git push -u origin main
 ```
 
-### Step 2 — Enable GitHub Pages
+**Step 2 — Enable GitHub Pages**
 
 1. Open your repository on GitHub
 2. Go to **Settings → Pages**
 3. Under **Source**, select **GitHub Actions**
 
-The workflow runs automatically on every push to `main`. Your site will be published at:
-
-```
-https://<your-username>.github.io/<repository-name>/
-```
-
-### Step 3 — Add secrets (X blocks only)
-
-If you use `platform: x` blocks, add your Bearer Token as a repository secret:
+**Step 3 — Add secrets (X blocks only)**
 
 1. Go to **Settings → Secrets and variables → Actions**
 2. Click **New repository secret**
 3. Name: `TWITTER_BEARER_TOKEN` / Value: your Bearer Token from the [X Developer Portal](https://developer.twitter.com/)
-
-GitHub and Misskey blocks require no secrets.
-
-### Updating your site
-
-Edit `site.yaml` or `assets/`, commit, and push. The workflow rebuilds and redeploys automatically.
-
-```bash
-# Example: update your bio
-# Edit site.yaml ...
-git add site.yaml
-git commit -m "Update bio"
-git push
-```
 
 ## CLI reference
 

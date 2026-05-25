@@ -105,7 +105,38 @@ blocks:
 
 ## GitHub Pages へのデプロイ
 
-### ステップ1 — サイト用リポジトリを作成する
+最も簡単な方法は **[ekiben-template](https://github.com/MoomA-0750/ekiben-template)** を使うことです。GitHub Actions のワークフローがあらかじめ用意されており、ローカルに ekiben をインストールする必要はありません。
+
+### ekiben-template を使う（推奨）
+
+**初回セットアップ（一度だけ）：**
+
+1. [ekiben-template](https://github.com/MoomA-0750/ekiben-template) を開き、**「Use this template」→「Create a new repository」** をクリックする
+2. 作成したリポジトリをクローンする：
+   ```bash
+   git clone git@github.com:<ユーザー名>/<リポジトリ名>.git
+   cd <リポジトリ名>
+   ```
+3. GitHub Pages を有効にする：**Settings → Pages → Source → GitHub Actions**
+4. *（Xブロックを使う場合のみ）* **Settings → Secrets and variables → Actions** に `TWITTER_BEARER_TOKEN` を追加する
+
+**日常の更新手順：**
+
+```bash
+# site.yaml を編集したり、assets/ に画像を追加したりする
+git add .
+git commit -m "プロフィール更新"
+git push
+# GitHub Actions が自動でビルド＆デプロイする
+```
+
+公開URLは `https://<ユーザー名>.github.io/<リポジトリ名>/` になります。
+
+---
+
+### 手動でセットアップする（テンプレートを使わない場合）
+
+**ステップ1 — サイト用リポジトリを作成する**
 
 GitHubで新しいリポジトリを作成（例: `my-profile`）し、以下を実行します：
 
@@ -120,39 +151,17 @@ git remote add origin git@github.com:<ユーザー名>/my-profile.git
 git push -u origin main
 ```
 
-### ステップ2 — GitHub Pages を有効にする
+**ステップ2 — GitHub Pages を有効にする**
 
 1. GitHubでリポジトリを開く
 2. **Settings → Pages** を開く
 3. **Source** で **GitHub Actions** を選択する
 
-`main` ブランチへのプッシュのたびにワークフローが自動実行されます。公開URLは以下になります：
-
-```
-https://<ユーザー名>.github.io/<リポジトリ名>/
-```
-
-### ステップ3 — シークレットを登録する（Xブロックを使う場合のみ）
-
-`platform: x` のブロックを使う場合、Bearer Tokenをリポジトリのシークレットに登録します：
+**ステップ3 — シークレットを登録する（Xブロックを使う場合のみ）**
 
 1. **Settings → Secrets and variables → Actions** を開く
 2. **New repository secret** をクリック
-3. 名前: `TWITTER_BEARER_TOKEN` / 値: [X Developer Portal](https://developer.twitter.com/) のBearer Token
-
-GitHubブロックとMisskeyブロックはシークレット不要です。
-
-### サイトを更新する
-
-`site.yaml` や `assets/` を編集してコミット・プッシュするだけで、自動的に再ビルド＆再デプロイされます：
-
-```bash
-# 例: 自己紹介を更新する
-# site.yaml を編集 ...
-git add site.yaml
-git commit -m "自己紹介を更新"
-git push
-```
+3. 名前: `TWITTER_BEARER_TOKEN` / 値: [X Developer Portal](https://developer.twitter.com/) の Bearer Token
 
 ## CLIリファレンス
 
