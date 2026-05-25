@@ -1,0 +1,5 @@
+dist/
+.ekiben_preview/
+*.egg-info/
+__pycache__/
+.env
