@@ -4,6 +4,8 @@ bento.me-like personal profile page static site generator.
 
 Define your layout in YAML, run one command, get a deployable HTML page.
 
+[日本語版 README はこちら](README.ja.md)
+
 ## Installation
 
 ```bash
@@ -15,7 +17,7 @@ pip install ekiben
 ```bash
 mkdir my-site && cd my-site
 ekiben init
-# Edit site.yaml and assets/
+# Edit site.yaml and place images in assets/
 ekiben serve       # preview at http://localhost:8080 with live reload
 ekiben build       # output to dist/
 ```
@@ -25,8 +27,8 @@ ekiben build       # output to dist/
 ```yaml
 profile:
   name: "Your Name"
-  avatar: "./assets/avatar.png"
-  bio: "Engineer / Tokyo"
+  avatar: "./assets/avatar.png"  # optional
+  bio: "Engineer / Tokyo"        # optional
 
 theme:
   background: "#f5f5f0"
@@ -95,24 +97,67 @@ Any block (except `spacer`) accepts an optional `color` field to override the ca
 
 ## Social platforms
 
-| Platform | Auth |
-|----------|------|
+| Platform | Auth required |
+|----------|---------------|
 | GitHub | None (public API) |
-| X | `TWITTER_BEARER_TOKEN` env var |
+| X | `TWITTER_BEARER_TOKEN` environment variable |
 | Misskey | None (requires `instance:` field in YAML) |
 
-## GitHub Actions
+## Deploy to GitHub Pages
+
+### Step 1 — Create your site repository
+
+Create a new repository on GitHub (e.g. `my-profile`), then:
 
 ```bash
+mkdir my-profile && cd my-profile
 ekiben init --with-actions
+# Edit site.yaml and place images in assets/
+git init -b main
+git add .
+git commit -m "Initial site"
+git remote add origin git@github.com:<your-username>/my-profile.git
+git push -u origin main
 ```
 
-Generates `.github/workflows/deploy.yml` for GitHub Pages deployment. Add `TWITTER_BEARER_TOKEN` to your repository secrets if you use X blocks.
+### Step 2 — Enable GitHub Pages
+
+1. Open your repository on GitHub
+2. Go to **Settings → Pages**
+3. Under **Source**, select **GitHub Actions**
+
+The workflow runs automatically on every push to `main`. Your site will be published at:
+
+```
+https://<your-username>.github.io/<repository-name>/
+```
+
+### Step 3 — Add secrets (X blocks only)
+
+If you use `platform: x` blocks, add your Bearer Token as a repository secret:
+
+1. Go to **Settings → Secrets and variables → Actions**
+2. Click **New repository secret**
+3. Name: `TWITTER_BEARER_TOKEN` / Value: your Bearer Token from the [X Developer Portal](https://developer.twitter.com/)
+
+GitHub and Misskey blocks require no secrets.
+
+### Updating your site
+
+Edit `site.yaml` or `assets/`, commit, and push. The workflow rebuilds and redeploys automatically.
+
+```bash
+# Example: update your bio
+# Edit site.yaml ...
+git add site.yaml
+git commit -m "Update bio"
+git push
+```
 
 ## CLI reference
 
 ```
-ekiben init [--with-actions]       Generate site.yaml template
-ekiben build [--input .] [--output dist]
-ekiben serve [--input .] [--port 8080]
+ekiben init [--with-actions]            Generate site.yaml template (and GitHub Actions workflow)
+ekiben build [--input .] [--output dist]   Build site into output directory
+ekiben serve [--input .] [--port 8080]     Build and serve locally with live reload
 ```
